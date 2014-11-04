@@ -5,3 +5,80 @@ using namespace std;
 void abbuble_sort(const int a[], int size);
 //升序冒泡排序，向量版声明
 void vbbuble_sort(vector<int> vec);
+
+#include"BuSo.h"
+#include<vector>
+using namespace std;
+void abbuble_sort(const int a[], int size){//传入数组，是需要排序的数组，值不作改变,在数组中直接输出排序后的数组。
+	int i, j;
+	int t;
+	int *b = new int[size];
+	for (i = 0; i < size; i++)b[i] = a[i];
+	for (j = 0; j < size; j++)
+	for (i = 0; i < size - j - 1; i++){
+		if (b[i] >b[i + 1]){
+			t = b[i];
+			b[i] = b[i + 1];
+			b[i + 1] = t;
+		}
+	}
+	for (i = 0; i < size; i++)
+		cout << b[i]<<" ";
+	cout << endl;
+	delete[]b;
+
+}
+void vbbuble_sort(vector<int>vec){//传入一个向量，在函数里进行冒泡排序，输出排序后结果，函数结束，形参释放，并不改变原向量
+	if (vec.size()<= 0){
+		cerr << "no contents to be sorted!";
+	}
+	else{
+		for (int i = 0; i< vec.size(); i++){
+			int t;
+			for (int j = 0; j < vec.size() - i - 1; j++){
+				if (vec.at(j)>vec.at(j + 1)){
+					t = vec.at(j);
+					vec.at(j) = vec.at(j + 1);
+					vec.at(j + 1) = t;
+
+				}
+			}
+		}
+		for (int i = 0; i < vec.size(); i++){
+			cout << vec.at(i) << " ";
+		}
+		cout << endl;
+	}
+}
+
+#include<iostream>
+#include<vector>
+using namespace std;
+#include"BuSo.h"
+
+//test
+int main(){
+	//数组冒泡排序
+	int a[10] = { 2, 3, 4, 4, 5, 6, 3, 1, 100, 4 };//此处的值可以任意改变
+	cout << " array before bubble sorting:" << endl;//输出排序前数组
+	for (int i = 0; i < 10; i++)
+		cout << a[i] << " ";
+	cout << endl;
+	cout << " array after bubble sorting" << endl;
+	abbuble_sort(a ,10);
+	//miniVector冒泡排序
+	vector<int> vec(10);
+	for (int i = 0; i < 10; i++){
+		vec.at(i)=a[i];
+	}//对向量进行赋值
+	cout << " vector before bubble sorting:" << endl;
+	for (int i = 0; i<10; i++){//输出排序前向量
+		cout << vec.at(i) << " ";
+	}
+	cout << endl;
+	cout << " vector after bubble sorting" << endl;
+	vbbuble_sort(vec);//给向量进行冒泡排序并输出排序结果
+	
+	getchar();
+
+}
