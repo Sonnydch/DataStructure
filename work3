@@ -1,0 +1,173 @@
+#include<iostream>
+using namespace std;
+class List{
+public:
+	List();
+	~List();
+	class Node{
+	public:
+		Node(int i=0,Node*n=NULL);
+		~Node();
+		Node *next;
+		int get_data();
+		void set_data(int i);
+	private:
+		int data;
+		
+	};
+	void List_link(int n);
+	void check_order();
+	void show_list();
+	void set_list(int a[], int n);
+	void insert_node(int n);
+	Node item;
+	void upsidedown();
+private:
+	Node *cur, *pre, *first, *head1, *head2;//记录当前节点指针，记录前一个位置指针，记录链表头指针，临时储存指针1，临时储存指针2
+};
+
+#include<iostream>
+#include"List.h"
+using namespace std;
+List::List(){
+	cur = NULL;
+	pre = NULL;
+	first = NULL;
+
+}
+List::~List(){
+	cur = NULL;
+	pre = NULL;
+	first = NULL;
+	delete cur;
+	delete pre;
+	delete first;
+}
+List::Node::Node(int i,Node*n){
+	 data = i;
+	 next = n;
+}
+List::Node::~Node(){
+	next = NULL;
+	delete next;
+}
+void List::List_link(int n){
+	first = new Node(n, NULL);
+	Node *newNode;
+	for (int i = n-1; i >0; i--){
+		newNode = new Node(i, first);
+		first = newNode;
+	}
+}//生成链表
+int List::Node::get_data(){
+	return data;
+}
+void List::check_order(){
+	cur = first;
+	pre = first;
+	while (1){
+		pre = cur;
+		cur = cur->next;
+		if (cur->get_data() < pre->get_data()){
+			cout << "Not in the right order!!!" << endl;
+			break;
+		}
+		if (cur->next == NULL&&cur->get_data()>=pre->get_data()){
+			cout << "right order!" << endl;
+			break;
+		}
+		else if (cur->next == NULL&&cur->get_data() < pre->get_data()){
+			cout << "Not in the right order!!!" << endl;
+			break;
+		}
+	}
+
+}//判断是否按照从小打到顺序排列
+void List::show_list(){
+	cur = first;
+	while (cur->next != NULL){
+		cout << cur->get_data() << endl;
+		cur = cur->next;
+	}
+	cout << cur->get_data() << endl;
+}
+void List::Node::set_data(int i){
+	data = i;
+}//给节点的数据部分赋值
+void List::set_list(int a[], int n){
+	cur = first;
+	for (int i = 0; cur->next!=NULL&&i < n-1; i++){
+		cur->set_data(a[i]);
+		cur = cur->next;
+	}
+	cur->set_data(a[n - 1]);
+}//设定链表中各数据值，方便测试。
+void List::insert_node(int n){
+	cur = first;
+	pre = first;
+	for (int i = 0; i < n; i++){
+		pre = cur;
+		cur = cur->next;
+	}
+	pre->next = &item;
+	item.next = cur;
+}//在第n个节点后插入新节点
+void List::upsidedown(){
+	cur = first;
+	pre = first;
+	head1 = pre;
+	head2 = cur;
+	pre = cur;
+	cur = cur->next;
+	head1->next = NULL;
+	for (; cur->next!= NULL;){
+		head1 = pre;
+		head2 = cur;
+		pre = cur;
+		cur = cur->next;
+		head2->next = head1;
+	}
+	cur->next = pre;
+	first = cur;
+
+}//将链表倒置
+
+#include<iostream>
+#include"List.h"
+int main(){
+	List l1,l2,l3;
+	// test exercise 4
+
+
+	int a[5] = { 1, 2, 3, 6, 5 };//数据测试组，可随意输入数据改变测试
+	l1.List_link(5);//产生一个有五个节点的链表，产生时使用默认方法给节点的数据部分赋值
+	l1.check_order();//核查是否按照从小到大排序
+	l1.show_list();//输出整个列表
+	l1.set_list(a, 5);//通过自己设定整个列表来测试
+	l1.check_order();
+	l1.show_list();
+	cout<< endl;
+
+
+	// test exercise 7
+	l2.List_link(5);
+	cout << "the original list is" << endl;
+	l2.show_list();
+	l2.insert_node(3);//由于使用了类中类，测试所用节点在List类内声明，插入节点测试
+	cout << "After inserting a node:" << endl;
+	l2.show_list();
+	cout << endl;
+
+
+
+	//test exercise 12
+	l3.List_link(5);
+	cout << "the original list is" << endl;
+	l3.set_list(a, 5);
+	l3.show_list();
+	cout <<"the upsidedown list is:"<< endl;
+	l3.upsidedown();//调用倒链表函数
+	l3.show_list();
+	
+	getchar();
+}
