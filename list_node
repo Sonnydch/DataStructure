@@ -1,0 +1,222 @@
+#include<iostream>
+using namespace std;
+class List{
+public:
+	List();
+	~List();
+	List(const List&l);
+	class Node{
+	public:
+		Node();
+		Node(int d, Node*n);
+		~Node();
+		Node *next;
+		void set_data(int i);
+		int get_data();
+	private:
+		int data;
+	};
+	void set_list(int a[],int n);
+	void link_list(int s);
+	void show_list();
+	void sort_list();
+	void contact_list(const List&L1, const List&l2);
+	void sort_contacted_list(const List&L1, const List&l2);
+	const List&operator=(const List&rightlist);
+	
+private:
+	Node *first, *cur, *pre;
+};
+
+#include<iostream>
+#include"List.h"
+using namespace std;
+List::Node::Node( ){//构造函数
+	data = 0;
+	next = NULL;
+}
+List::Node::Node(int d, Node *n){//重载构造函数
+	data = d;
+	next = n;
+
+}
+
+List::Node::~Node(){//析构函数
+	next = NULL;
+	delete next;
+}
+int List::Node::get_data(){//获取节点的数据
+	return data;
+}
+void List::Node::set_data(int i){//设置节点数据值
+	data = i;
+}
+List::List(){//List类的构造函数
+	first = NULL;
+	cur = NULL;
+	pre = NULL;
+	link_list(5);
+}
+List::List(const List&l){//复制构造函数
+	int k = 1;
+	Node *newcur = l.first;
+	for (; newcur->next != NULL; k++)
+	{
+		newcur = newcur->next;
+	}
+	link_list(k);
+	cur = first;
+	newcur = l.first;
+	while (cur->next!=NULL)
+	{
+		cur->set_data(newcur->get_data());
+		cur = cur->next;
+		newcur = newcur->next;
+
+	}
+	cur->set_data(newcur->get_data());
+}//复制构造函数
+List::~List(){//析构函数
+	delete first;
+	delete cur;
+	delete pre;
+}
+void List::link_list(int s){
+	first = new Node(s,NULL);
+	for (int i = s - 1; i > 0; i--){
+		first = new Node(i, first);
+	}
+
+
+
+}//生成一个固定大小的链表
+void List::show_list(){
+	cur = first;
+	pre = first;
+	for (; cur->next != NULL; pre = cur, cur = cur->next){
+		cout << cur->get_data() << endl;
+	}
+	cout << cur->get_data() << endl;
+	
+}//输出链表
+void List::set_list(int a[], int n){
+	cur = first;
+	pre = first;
+	for (int i=0; cur->next != NULL&&i<n; pre = cur, cur = cur->next,i++){
+		cur->set_data(a[i]);
+	}
+	cur->set_data(a[n-1]);
+}//给链表赋值
+void List::sort_list(){
+	cur = first;
+	pre = first;
+	Node *prepre;
+	int k = 1;
+	while (cur->next != NULL){
+		cur =cur->next;
+		k++;
+	}
+
+	for (int i = 0; i < k; i++)
+	{
+		cur = first;
+		pre = first;
+		int temp;
+		for (int j = 0; j < k - i - 1; j++){
+			pre = cur;
+			cur = cur->next;
+			if (pre->get_data() < cur->get_data()){
+				temp = pre->get_data();
+				pre->set_data(cur->get_data());
+				cur->set_data(temp);
+			}
+		}
+	}
+
+
+}//冒泡排序
+void List::contact_list(const List&L1,const List&l2){//将两个链表链接起来
+	Node *newcur1;
+	int k=1;
+	newcur1 = L1.first;
+	for (; newcur1->next != NULL;k++)newcur1 = newcur1->next;
+	newcur1->next = l2.first;
+	first = L1.first;
+	
+
+}
+const List&List::operator=(const List&rightlist){//等号重载
+	int k=1;
+	Node *newcur = rightlist.first;
+	for (; newcur->next != NULL; k++)
+	{
+		newcur = newcur->next;
+	}
+	cur = first;
+	newcur = rightlist.first;
+	while (cur->next != NULL)
+	{
+		cur->set_data(newcur->get_data());
+		cur = cur->next;
+		newcur = newcur->next;
+
+	}
+	cur->set_data(newcur->get_data());
+	return *this;
+
+}//加号重载
+void List::sort_contacted_list(const List&L1, const List&L2){//将排序好的两个链表连接后运用简单的排序手段排序
+	Node *newcur1, *newcur2;
+	int k=1;//计数器
+	newcur1 = L1.first;
+	newcur2 = L2.first;
+	for (; newcur1->next != NULL; k++)newcur1 = newcur1->next;
+	for (; newcur2->next != NULL; k++)newcur2 = newcur2->next;
+	link_list(k);
+	cur = first;
+	newcur1 = L1.first;
+	newcur2 = L2.first;
+	for (int i = 0; i < k; i++){
+		if (newcur1->get_data()>newcur2->get_data()){
+			cur->set_data(newcur1->get_data());
+			newcur1 = newcur1->next;
+		}
+		else
+		{
+			cur->set_data(newcur2->get_data());
+			newcur2 = newcur2->next;
+		}
+	}
+
+}
+
+#include<iostream>
+#include"List.h"
+int main(){
+	List l1,l2,l3,l4;
+	//test exercise 1
+	l1.link_list(5);
+	l2.link_list(5);
+	int a[5] = { 1, 2, 3, 4, 5 }, b[5] = { 6, 7, 8, 9, 10 };
+	l1.set_list(a, 5);
+	l2.set_list(b, 5);
+	cout << "first experiment results" << endl;
+	l1.show_list();
+	l2.show_list();
+	//test exercise 2
+	cout << "second experiment results" << endl;
+	List a3(l1), b3(l2);
+	l1.show_list();
+	a3.sort_list();
+	a3.show_list();
+	b3.sort_list();
+	b3.show_list();
+	//test exercise 3
+	cout << "third experiment results" << endl;
+	l3.contact_list(l1,l2);//将l1和l2连接起来并且得到链表l3;
+	l3.sort_list();
+	l3.show_list();
+	l4.sort_contacted_list(l1, l2);
+	
+	getchar();
+}
