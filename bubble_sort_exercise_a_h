@@ -1,0 +1,7 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+//升序冒泡排序，数组版声明
+void abbuble_sort(const int a[], int size);
+//升序冒泡排序，向量版声明
+void vbbuble_sort(vector<int> vec);
