@@ -26,3 +26,119 @@ public:
 private:
 	Node *cur, *pre, *first, *head1, *head2;//记录当前节点指针，记录前一个位置指针，记录链表头指针，临时储存指针1，临时储存指针2
 };
+//List.cpp
+#include<iostream>
+#include"List.h"
+using namespace std;
+List::List(){//链表的构造函数
+	cur = NULL;
+	pre = NULL;
+	first = NULL;
+	head1 = NULL;
+	head2 = NULL;
+
+}
+List::~List(){//链表析构函数，需要删除整条链
+	delete pre;//将用来储存临时指针的3个临时变量释放
+	delete head1;
+	delete head2;
+	while (first->next != NULL){//遍历整条链，逐个释放
+		cur = first;
+		first = first->next;
+		delete cur;
+	}
+	delete first;//将最后剩下的指针释放
+}
+List::Node::Node(int i,Node*n){//构造函数重载，形参为节点的值，及next指针指向
+	 data = i;
+	 next = n;
+}
+List::Node::~Node(){//节点的析构函数，释放节点的next指针
+	next = NULL;
+	delete next;
+}
+void List::List_link(int n){//生成一个链表，形参为链表的大小
+	first = new Node(n, NULL);
+	Node *newNode;
+	for (int i = n-1; i >0; i--){
+		newNode = new Node(i, first);//默认的链表中节点的值为节点的顺序
+		first = newNode;
+	}
+}
+int List::Node::get_data(){//得到节点的数据值
+	return data;
+}
+void List::check_order(){//验证是否从小到大顺序排列
+	cur = first;//将当前指针，与前指针都指向头指针
+	pre = first;
+	bool found = false;//标记是否找到顺序不正确的节点
+	while (cur->next != NULL){
+		pre = cur;
+		cur = cur->next;
+		if (pre->get_data() > cur->get_data()){
+			found = true;
+			break;//找到的时候就可以跳出while循环
+		}
+
+	}
+	if (found){//找到就输出不是按照从小到大顺序排列的提示
+		cout << "not in the right order!" << endl;
+	}
+	else{//没有找到就输出是按照从小到大顺序排列的提示
+		cout << "in the right order! " << endl;
+	}
+
+	
+	
+
+}
+void List::show_list(){
+	cur = first;
+	while (cur->next != NULL){
+		cout << cur->get_data() << " ";
+		cur = cur->next;
+	}
+	cout << cur->get_data() << endl;
+}
+void List::Node::set_data(int i){//给节点的数据部分赋值
+	data = i;
+}
+void List::set_list(int a[], int n){//设定链表中各数据值，方便测试。
+	cur = first;
+	for (int i = 0; cur->next!=NULL&&i < n-1; i++){
+		cur->set_data(a[i]);
+		cur = cur->next;
+	}
+	cur->set_data(a[n - 1]);
+}
+void List::insert_node(int n,List::Node *item){//在第n个节点后插入新节点
+	cur = first;
+	pre = first;
+	for (int i = 0; i < n; i++){//将链表循环至需要插入的位置
+		pre = cur;
+		cur = cur->next;
+	}
+	List::Node *temp;//临时变量存储前一个指针的指向，也就是新插入节点的后一个节点
+	temp = pre->next;
+	pre->next =item;
+	item->next = temp;
+}
+void List::upsidedown(){
+	cur = first;
+	pre = first;
+	head1 = pre;//记录每个节点的前一个节点
+	head2 = cur;//记录当前节点
+	pre = cur;
+	cur = cur->next;
+	head1->next = NULL;
+	while(cur->next!= NULL){
+		head1 = pre;//记录每个节点的前一个节点
+		head2 = cur;//记录当前节点
+		pre = cur;//往前移
+		cur = cur->next;//往前移
+		head2->next = head1;//将之前记录的后一节点的next指向前一节点
+	}
+	cur->next = pre;//遍历到最后一个节点直接倒置
+	first = cur;//头节点指向之前的末节点
+
+}//将链表倒置
