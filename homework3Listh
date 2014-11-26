@@ -1,0 +1,28 @@
+//List.h
+#include<iostream>
+using namespace std;
+class List{
+public:
+	List();
+	~List();
+	class Node{
+	public:
+		Node(int i=0,Node*n=NULL);
+		~Node();
+		Node *next;
+		int get_data();
+		void set_data(int i);
+	private:
+		int data;
+		
+	};
+	void List_link(int n);
+	void check_order();
+	void show_list();
+	void set_list(int a[], int n);
+	void insert_node(int n,Node *item);
+	Node item;
+	void upsidedown();
+private:
+	Node *cur, *pre, *first, *head1, *head2;//记录当前节点指针，记录前一个位置指针，记录链表头指针，临时储存指针1，临时储存指针2
+};
