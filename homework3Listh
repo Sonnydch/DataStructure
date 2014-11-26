@@ -142,3 +142,51 @@ void List::upsidedown(){
 	first = cur;//头节点指向之前的末节点
 
 }//将链表倒置
+//main.cpp
+#include<iostream>
+#include"List.h"
+int main(){
+	List l1,l2,l3;
+	// test exercise 4
+
+	cout << "test exercise 4:" << endl;
+	int a[5] = { 4, 2, 3, 5, 6 };//数据测试组，可随意输入数据改变测试
+	l1.List_link(5);//产生一个有五个节点的链表，产生时使用默认方法给节点的数据部分赋值
+	l1.show_list();//输出整个列表
+	l1.check_order();//核查是否按照从小到大排序
+	l1.set_list(a, 5);//通过自己设定整个列表来测试
+	l1.show_list();//输出设定好新值以后的链表
+	l1.check_order();//调用确定是否为从小到大顺序排列的函数
+
+	
+	// test exercise 7
+	cout << "test exercise 7:" << endl;
+	int big,n, pos ;//三个参数，第一个是存储用户输入所需链表的大小，第二个是用户输入需要节点的值，第三个是节点位置
+	List::Node *item=new List::Node();//生成一个节点，指针指向这个节点
+	cout << "input how big the list you like:" << endl;
+	cin >> big;
+	l2.List_link(big);//生成用户定义大小的链表
+	cout << "the original list is" << endl;
+	l2.show_list();//将默认的链表输出
+	cout << "input the value of the insert node and the position to insert :" << endl;
+	cin >> n>>pos;//输入用户的节点值与位置信息
+	item->set_data(n);//设置节点的值
+	l2.insert_node(pos,item);//调用插入函数将节点插入
+	cout << "After inserting a node:" << endl;
+	l2.show_list();//输出插入节点后的链表
+	cout << endl;
+
+
+
+	//test exercise 12
+	cout << "test exercise 12:" << endl;
+	l3.List_link(5);//生成一个测试用的链表
+	cout << "the original list is" << endl;
+	l3.set_list(a, 5);//设置链表中各个节点的值
+	l3.show_list();//将链表输出
+	cout <<"the upsidedown list is:"<< endl;
+	l3.upsidedown();//调用倒链表函数
+	l3.show_list();//将链表输出
+	
+	getchar();//方便测试时设置断点
+}
